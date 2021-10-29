@@ -1,6 +1,20 @@
 # nfl-laravel-api
-Backend for a NFL app
+RESTful api for [NFL app](https://github.com/cgressang/meta-nfl-la). All responses come in standard JSON.
 
-Laravel Framework 8.66.0
+Using [Laravel](https://laravel.com/) Framework 8.66.0
 
-[More info](https://github.com/cgressang/meta-nfl-la)
+## RESTful URLs
+
+### Conference endpoints
+
+* List of conferences
+	* `GET /api/v1/conference`
+* List of conference divisions
+	* `GET /api/v1/conference/divisions`
+* List of conference teams
+	* `GET /api/v1/conference/teams`
+
+### Team endpoints
+
+* A single team
+	* `GET /api/v1/team/[id]`
