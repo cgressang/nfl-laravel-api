@@ -3,6 +3,8 @@ RESTful api for [NFL app](https://github.com/cgressang/meta-nfl-la). All respons
 
 Using [Laravel](https://laravel.com/) Framework 8.66.0
 
+[Swagger Documentation](https://cgressang.github.io/nfl-laravel-api/)
+
 ## RESTful URLs
 
 ### Conference endpoints

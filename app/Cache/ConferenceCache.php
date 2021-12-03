@@ -8,56 +8,36 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 
-class ConferenceCache implements ConferenceCacheInterface
+class ConferenceCache extends BaseCache implements ConferenceCacheInterface
 {
-    const SECOND = 1;
-    const SECONDS_DAY = 86400;
-    const SECONDS_HOUR = 3600;
-
     private ConferenceRepositoryInterface $conferenceRepository;
 
     private int $cacheTime;
 
-    public function __construct(ConferenceRepositoryInterface $conferenceRepository)
+    public function __construct(ConferenceRepositoryInterface $conferenceRepository, int $cacheTime = self::SECONDS_HOUR)
     {
         $this->conferenceRepository = $conferenceRepository;
 
-        if (App::environment('local')) {
-            $this->cacheTime = TeamCache::SECOND;
-        } else {
-            $this->cacheTime = TeamCache::SECONDS_HOUR;
-        }
+        $this->cacheTime = $cacheTime;
     }
 
-    public function all(?int $seconds = null): Collection
+    public function all(): Collection
     {
-        if (is_null($seconds)) {
-            $seconds = $this->cacheTime;
-        }
-
-        return Cache::remember('conferences', ConferenceCache::SECONDS_HOUR, function() {
+        return Cache::remember('conferences', $this->cacheTime, function() {
             return $this->conferenceRepository->all();
         });
     }
 
-    public function divisions(?int $seconds = null): Collection
+    public function divisions(): Collection
     {
-        if (is_null($seconds)) {
-            $seconds = $this->cacheTime;
-        }
-
-        return Cache::remember('divisions', ConferenceCache::SECONDS_HOUR, function() {
+        return Cache::remember('divisions', $this->cacheTime, function() {
             return $this->conferenceRepository->divisions();
         });
     }
 
-    public function teams(?int $seconds = null): Collection
+    public function teams(): Collection
     {
-        if (is_null($seconds)) {
-            $seconds = $this->cacheTime;
-        }
-
-        return Cache::remember('teams', ConferenceCache::SECONDS_HOUR, function() {
+        return Cache::remember('teams', $this->cacheTime, function() {
             return $this->conferenceRepository->teams();
         });
     }

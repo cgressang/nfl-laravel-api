@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\ConferenceTeam;
+use App\Http\Resources\Team;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Conference extends JsonResource
@@ -22,7 +22,7 @@ class Conference extends JsonResource
         ];
 
         if (isset($this->team_list)) {
-            $arr['team_list'] = ConferenceTeam::collection($this->team_list);
+            $arr['team_list'] = Team::collection($this->team_list);
         }
 
         if (isset($this->division_list)) {

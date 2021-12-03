@@ -8,34 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 
-class TeamCache implements TeamCacheInterface
+class TeamCache extends BaseCache implements TeamCacheInterface
 {
-    const SECOND = 1;
-    const SECONDS_DAY = 86400;
-    const SECONDS_HOUR = 3600;
-
     private TeamRepositoryInterface $teamRepository;
 
     private int $cacheTime;
 
-    public function __construct(TeamRepositoryInterface $teamRepository)
+    public function __construct(TeamRepositoryInterface $teamRepository, int $cacheTime = self::SECONDS_HOUR)
     {
         $this->teamRepository = $teamRepository;
 
-        if (App::environment('local')) {
-            $this->cacheTime = TeamCache::SECOND;
-        } else {
-            $this->cacheTime = TeamCache::SECONDS_HOUR;
-        }
+        $this->cacheTime = $cacheTime;
     }
 
-    public function find(int $id, ?int $seconds = null): ?Model
+    public function find(int $id): ?Model
     {
-        if (is_null($seconds)) {
-            $seconds = $this->cacheTime;
-        }
-
-		return Cache::remember('team-'.$id, $seconds, function() use ($id) {
+		return Cache::remember('team-'.$id, $this->cacheTime, function() use ($id) {
             return $this->teamRepository->find($id);
         });
     }
